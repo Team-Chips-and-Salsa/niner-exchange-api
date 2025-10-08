@@ -1,10 +1,22 @@
+# Python / Django
 venv/
 __pycache__/
+*.pyc
 db.sqlite3
 
+# Node / React
+node_modules/
+build/
+.env
+.env.local
+.env.*.local
+
+# IDE & OS Files
 .idea/
 *.iml
 *.iws
 out/
 .DS_Store
+
+# Secrets
 firebase-service-account.json

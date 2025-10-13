@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, MeetupLocation, Transaction
+from .models import CustomUser, MeetupLocation, Transaction, Category, Listing, Image
 
 class CustomUserAdmin(UserAdmin):
     """
@@ -33,4 +33,12 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ('status', 'created_at')
     search_fields = ('id', 'buyer__email', 'seller__email')
 
+@admin.register(Listing)
+class ListingAdmin(admin.ModelAdmin):
+    list_display = ('listing_id', 'seller', 'category_id', 'title', 'condition', 'status', 'created_at', 'updated_at')
+    list_filter = ('status', 'condition', 'category_id')
+    search_fields = ('title', 'description')
+
 admin.site.register(CustomUser, CustomUserAdmin)
+# Need to register Image
+admin.site.register(Category)

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
+from django.core.validators import MaxValueValidator, MinValueValidator
 import uuid
 
 from django.conf import settings
@@ -109,3 +110,42 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"Transaction {self.id} - {self.status}"
+
+class Category(models.Model):
+    category_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255, unique=True, null=False)
+
+
+class Listing(models.Model):
+    listing_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.TextField(max_length=500)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    CONDITIONS = [
+        ('USED', 'Used'),
+        ('LIKE NEW', 'Like New'),
+        ('NEW', 'New'),
+    ]
+    condition = models.CharField(max_length=11, choices=CONDITIONS, default='USED')
+    STATUS_CHOICES = [
+        ('OPEN', 'Open'),
+        ('ARCHIVED', 'Archived'),
+        # Might remove or change the name of this enum value
+        ('IN PROGRESS', 'In Progress'),
+    ]
+    status = models.CharField(max_length=11, choices=STATUS_CHOICES, default='OPEN')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+    
+
+class Image(models.Model):
+    image_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    listing_id = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    imageUrl = models.TextField(null=False)
+    # Limit range to 1-3
+    uploadOrder = models.IntegerField(validators=[MaxValueValidator(3), MinValueValidator(1)])

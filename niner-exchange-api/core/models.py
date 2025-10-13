@@ -113,7 +113,13 @@ class Transaction(models.Model):
 
 class Category(models.Model):
     category_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255, unique=True, null=False)
+    CATEGORIES = [
+        ('COURSE MATERIAL', 'Course Material'),
+        ('GENERAL ITEM', 'General Item'),
+        ('SERVICE', 'Service'),
+        ('SUBLEASE', "Sublease"),
+    ]
+    name = models.CharField(max_length=50, choices=CATEGORIES, null=False)
 
 
 class Listing(models.Model):

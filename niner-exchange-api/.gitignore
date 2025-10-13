@@ -1,4 +1,5 @@
 # Python / Django
+migrations/
 venv/
 __pycache__/
 *.pyc

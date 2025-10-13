@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MeetupLocation, Transaction, CustomUser
+from .models import MeetupLocation, Transaction, CustomUser, Listing, Category, Image
 
 
 class MeetupLocationSerializer(serializers.ModelSerializer):
@@ -71,3 +71,17 @@ class TransactionStatusSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(f'Cannot change status from {current} to {new_status}.')
         return attrs
 
+class ListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Listing
+        fields = '__all__'
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'

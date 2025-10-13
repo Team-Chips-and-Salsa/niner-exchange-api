@@ -5,11 +5,14 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from firebase_admin import auth as firebase_auth
 from rest_framework import generics, permissions
-from .models import MeetupLocation, Transaction
+from .models import MeetupLocation, Transaction, Listing, Category, Image
 from .serializers import (
     MeetupLocationSerializer,
     TransactionSerializer,
     TransactionStatusSerializer,
+    ListingSerializer,
+    CategorySerializer,
+    ImageSerializer,
 )
 
 class LoginView(APIView):
@@ -70,4 +73,27 @@ class TransactionStatusUpdateView(generics.UpdateAPIView):
         return self.update(request, *args, **kwargs)
     
 class ListingCreateView(generics.CreateAPIView):
-    pass
+    queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
+    # Need to redirect the user after POST reqyests
+
+class ListingListView(generics.ListAPIView):
+    queryset = Listing.objects.all().order_by('created_at')
+    serializer_class = ListingSerializer
+
+class ListingUpdateView(generics.UpdateAPIView):
+    queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
+    lookup_field = 'listing_id'
+
+    def patch(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.patch(request, *args, **kwargs)
+
+class CategoryCreateView(generics.CreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class ImageCreateView(generics.CreateAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer

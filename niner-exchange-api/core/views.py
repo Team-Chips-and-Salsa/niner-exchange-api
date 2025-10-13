@@ -4,6 +4,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from firebase_admin import auth as firebase_auth
+from rest_framework import generics, permissions
+from .models import MeetupLocation, Transaction
+from .serializers import (
+    MeetupLocationSerializer,
+    TransactionSerializer,
+    TransactionStatusSerializer,
+)
 
 class LoginView(APIView):
     def post(self, request, *args, **kwargs):
@@ -34,3 +41,30 @@ class LoginView(APIView):
             })
         else:
             return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class MeetupLocationListView(generics.ListCreateAPIView):
+    queryset = MeetupLocation.objects.all().order_by('name')
+    serializer_class = MeetupLocationSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAdminUser()]
+        return [permissions.IsAuthenticated()]
+
+
+class TransactionCreateView(generics.CreateAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class TransactionStatusUpdateView(generics.UpdateAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionStatusSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'
+
+    def patch(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)

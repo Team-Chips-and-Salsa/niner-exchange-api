@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, MeetupLocation, Transaction
 
 class CustomUserAdmin(UserAdmin):
     """
@@ -21,5 +21,16 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'password', 'password2'),
         }),
     )
+
+@admin.register(MeetupLocation)
+class MeetupLocationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'latitude', 'longitude')
+    search_fields = ('name',)
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'buyer', 'seller', 'meetup_location', 'final_price', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('id', 'buyer__email', 'seller__email')
 
 admin.site.register(CustomUser, CustomUserAdmin)

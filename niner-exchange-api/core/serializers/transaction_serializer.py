@@ -1,12 +1,7 @@
 from rest_framework import serializers
-from .models import MeetupLocation, Transaction, CustomUser
-
-
-class MeetupLocationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MeetupLocation
-        fields = ['id', 'name', 'description', 'latitude', 'longitude']
-
+from core.models.user import CustomUser
+from core.models.transaction import Transaction
+from core.models.meetup_location import MeetupLocation
 
 class TransactionSerializer(serializers.ModelSerializer):
     buyer = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
@@ -70,4 +65,3 @@ class TransactionStatusSerializer(serializers.ModelSerializer):
         if new_status not in allowed.get(current, set()):
             raise serializers.ValidationError(f'Cannot change status from {current} to {new_status}.')
         return attrs
-

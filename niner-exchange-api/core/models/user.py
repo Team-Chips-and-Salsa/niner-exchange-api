@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission, BaseUserManager
 import uuid
 
-from django.conf import settings
-
-
 class CustomUserManager(BaseUserManager):
 
     def _create_user(self, email, password=None, **extra_fields):
@@ -68,7 +65,6 @@ class CustomUser(AbstractUser):
         blank=True
     )
 
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -76,36 +72,3 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
-
-
-class MeetupLocation(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
-
-    def __str__(self):
-        return self.name
-
-
-class Transaction(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # Add a Listing model later
-    # listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='purchases', on_delete=models.CASCADE)
-    seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sales', on_delete=models.CASCADE)
-    meetup_location = models.ForeignKey(MeetupLocation, on_delete=models.SET_NULL, null=True, blank=True)
-    final_price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    STATUS_CHOICES = [
-        ('PENDING', 'Pending'),
-        ('ACCEPTED', 'Accepted'),
-        ('REJECTED', 'Rejected'),
-        ('COMPLETED', 'Completed'),
-    ]
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"Transaction {self.id} - {self.status}"

@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, MeetupLocation, Transaction
+
+from core.models.meetup_location import MeetupLocation
+from core.models.transaction import Transaction
+from core.models.user import CustomUser
+
 
 class CustomUserAdmin(UserAdmin):
     """

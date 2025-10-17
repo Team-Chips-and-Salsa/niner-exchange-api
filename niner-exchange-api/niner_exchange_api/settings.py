@@ -145,7 +145,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-# Simple JWT lifetimes (override via env: JWT_ACCESS_MINUTES, JWT_REFRESH_DAYS)
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=int(os.getenv('JWT_ACCESS_MINUTES', '60'))),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=int(os.getenv('JWT_REFRESH_DAYS', '7'))),

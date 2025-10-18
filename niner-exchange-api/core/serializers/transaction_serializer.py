@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from core.models.user import CustomUser
 from core.models.transaction import Transaction
 from core.models.meetup_location import MeetupLocation

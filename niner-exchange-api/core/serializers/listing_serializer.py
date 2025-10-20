@@ -1,21 +1,19 @@
 import decimal
 from rest_framework import serializers
 from core.models.listing import Listing
+from core.serializers.image_serializer import ImageSerializer
 
 
 class ListingSerializer(serializers.ModelSerializer):
 
-    seller = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='email'
-    )
-
+    seller = serializers.SlugRelatedField(read_only=True, slug_field='email')
+    images = serializers.SerializerMethodField()
     class Meta:
         model = Listing
         fields = [
             'listing_id',
             'seller',
-            'category_id',
+            'category',
             'title',
             'description',
             'price',
@@ -23,8 +21,13 @@ class ListingSerializer(serializers.ModelSerializer):
             'status',
             'created_at',
             'updated_at',
+            'images',
         ]
         read_only_fields = ['listing_id', 'status', 'created_at', 'updated_at']
+
+    def get_images(self, obj):
+            qs = obj.images.order_by('upload_order')
+            return ImageSerializer(qs, many=True, context=self.context).data
 
     def validate_price(self, value):
         if value <= decimal.Decimal('0.00'):

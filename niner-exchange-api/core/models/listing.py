@@ -9,7 +9,7 @@ from core.models.category import Category
 class Listing(models.Model):
     listing_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=500)
     price = models.DecimalField(max_digits=10, decimal_places=2)

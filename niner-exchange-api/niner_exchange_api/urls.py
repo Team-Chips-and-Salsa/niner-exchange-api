@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/', include('core.urls.listing_urls')), # Public Listing API endpoints
     path('api/', include('core.urls.image_urls')), # Public Image API endpoints
     path('api/', include('core.urls.category_urls')), # Public Category API endpoints
+    path('api/pricing/', include('core.urls.pricing_urls')), # Pricing-related API endpoints
 ]

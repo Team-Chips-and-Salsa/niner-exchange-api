@@ -13,18 +13,23 @@ class Listing(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=500)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    price_new = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
     CONDITIONS = [
-        ('USED', 'Used'),
-        ('LIKE_NEW', 'Like New'),
-        ('NEW', 'New'),
+        ("USED", "Used"),
+        ("LIKE_NEW", "Like New"),
+        ("NEW", "New"),
     ]
-    condition = models.CharField(max_length=11, choices=CONDITIONS, default='USED')
+    condition = models.CharField(
+        max_length=11, choices=CONDITIONS, null=True, blank=True
+    )
     STATUS_CHOICES = [
-        ('ACTIVE', 'Active'),
-        ('SOLD', 'Sold'),
-        ('REMOVE', 'Remove'),
+        ("ACTIVE", "Active"),
+        ("SOLD", "Sold"),
+        ("REMOVE", "Remove"),
     ]
-    status = models.CharField(max_length=11, choices=STATUS_CHOICES, default='ACTIVE')
+    status = models.CharField(max_length=11, choices=STATUS_CHOICES, default="ACTIVE")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

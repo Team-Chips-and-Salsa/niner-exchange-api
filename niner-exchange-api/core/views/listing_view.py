@@ -27,7 +27,6 @@ class ListingUpdateView(generics.UpdateAPIView):
     def get_queryset(self):
         return Listing.objects.filter(seller=self.request.user)
 
-
 class ListingStatusUpdateView(generics.UpdateAPIView):
     queryset = Listing.objects.all()
     serializer_class = ListingStatusSerializer
@@ -40,3 +39,9 @@ class ListingStatusUpdateView(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         kwargs["partial"] = True
         return self.update(request, *args, **kwargs)
+
+class GetListingView(generics.RetrieveAPIView):
+    queryset = Listing.objects.all()
+    serializer_class = ListingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'listing_id'

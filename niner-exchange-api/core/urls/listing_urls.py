@@ -1,9 +1,10 @@
 from django.urls import path
 
-from core.views.listing_view import ListingListCreateView, ListingStatusUpdateView, ListingUpdateView
+from core.views.listing_view import ListingListCreateView, ListingStatusUpdateView, ListingUpdateView, GetListingView
 
 urlpatterns = [
     path('listings/', ListingListCreateView.as_view(), name="listing-list-create"),
-    path('listings/<uuid:listing_id>/', ListingUpdateView.as_view(), name="listing-detail-update"),
+    path('listings/<uuid:listing_id>/', GetListingView.as_view(), name='listing-detail'),
+    path('listings/<uuid:listing_id>/edit/', ListingUpdateView.as_view(), name="listing-detail-update"),
     path('listings/<uuid:listing_id>/status/', ListingStatusUpdateView.as_view(), name="listing-status-update"),
 ]

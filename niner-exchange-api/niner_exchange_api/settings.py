@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import cloudinary
 from urllib.parse import urlparse, unquote
 from dotenv import load_dotenv
 from datetime import timedelta

@@ -7,11 +7,6 @@ class ListingFilter(django_filters.FilterSet):
         method="filter_search", label="Search (title or description)"
     )
 
-    category_id = django_filters.UUIDFilter(field_name="category__category_id")
-
-    # Filter by condition (exact match)
-    condition = django_filters.ChoiceFilter(choices=Listing.CONDITIONS)
-
     # Filter by minimum price (price__gte: greater than or equal)
     min_price = django_filters.NumberFilter(field_name="price", lookup_expr="gte")
 
@@ -22,8 +17,6 @@ class ListingFilter(django_filters.FilterSet):
         model = Listing
         # Fields for exact filtering
         fields = [
-            "category_id",
-            "condition",
             "status",
         ]
 

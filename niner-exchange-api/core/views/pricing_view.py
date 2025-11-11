@@ -23,12 +23,15 @@ def suggest_price(request):
 
     response_data = {}
 
-    price_new = get_average_listing_price(title, EBAY_CONDITION_NEW)
-    response_data["median_price_new"] = price_new
+    # price_new = get_average_listing_price(title, EBAY_CONDITION_NEW)
+    # response_data["median_price_new"] = price_new
 
     if condition == "LIKE_NEW":
         price_open_box = get_average_listing_price(title, EBAY_CONDITION_OPEN_BOX)
         response_data["median_price_open_box"] = price_open_box
+    elif condition == "NEW":
+        price_new = get_average_listing_price(title, EBAY_CONDITION_NEW)
+        response_data["median_price_new"] = price_new
     else:
         price_used = get_average_listing_price(title, EBAY_CONDITION_USED)
         response_data["median_price_used"] = price_used

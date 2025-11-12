@@ -22,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'first_name',
             'last_name',
+            'date_joined',
             'email',
             'profile_image_url',
             'avg_rating',

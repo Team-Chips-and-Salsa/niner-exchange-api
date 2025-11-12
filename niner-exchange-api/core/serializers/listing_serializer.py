@@ -1,6 +1,6 @@
 import decimal
 from rest_framework import serializers
-from core.models.listing import Listing, ItemListing, TextbookListing, Sublease, Service
+from core.models.listing import Listing, ItemListing, TextbookListing, Sublease, Service, PhysicalListing
 from core.serializers.image_serializer import ImageSerializer
 
 
@@ -105,17 +105,21 @@ class ListingStatusSerializer(serializers.ModelSerializer):
 
         return value
 
+class PhysicalListingSerializer(ListingSerializer):
+    class Meta(ListingSerializer.Meta):
+        model = PhysicalListing
+        fields = ListingSerializer.Meta.fields + ["condition", "price_new"]
 
 class ItemListingSerializer(ListingSerializer):
     class Meta(ListingSerializer.Meta):
         model = ItemListing
-        fields = ListingSerializer.Meta.fields + ["condition"]
+        fields = ListingSerializer.Meta.fields + ["condition", "price_new"]
 
 
 class TextbookListingSerializer(ListingSerializer):
     class Meta(ListingSerializer.Meta):
         model = TextbookListing
-        fields = ListingSerializer.Meta.fields + ["condition", "course_code"]
+        fields = ListingSerializer.Meta.fields + ["condition", "course_code", "price_new"]
 
 
 class SubleaseSerializer(ListingSerializer):

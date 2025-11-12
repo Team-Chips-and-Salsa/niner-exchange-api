@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.db.models import Prefetch
 
 from core.filters.listing_filter import ListingFilter
-from core.models.listing import Listing, ItemListing, TextbookListing, Sublease, Service
+from core.models.listing import Listing, ItemListing, TextbookListing, Sublease, Service, PhysicalListing
 from core.serializers.listing_serializer import (
     ListingSerializer,
     ListingStatusSerializer,
@@ -12,6 +12,7 @@ from core.serializers.listing_serializer import (
     TextbookListingSerializer,
     SubleaseSerializer,
     ServiceSerializer,
+    PhysicalListingSerializer,
 )
 
 
@@ -118,10 +119,12 @@ class GetListingView(generics.RetrieveAPIView):
             return listing.sublease
         elif hasattr(listing, "service"):
             return listing.service
-        elif hasattr(listing, "textbooklisting"):
-            return listing.textbooklisting
-        elif hasattr(listing, "itemlisting"):
-            return listing.itemlisting
+        elif hasattr(listing, "physicallisting"):
+            if hasattr(listing.physicallisting, "textbooklisting"):
+                return listing.physicallisting.textbooklisting
+            if hasattr(listing.physicallisting, "itemlisting"):
+                return listing.physicallisting.itemlisting
+            return listing.physicallisting
         else:
             return listing
 
@@ -136,5 +139,7 @@ class GetListingView(generics.RetrieveAPIView):
             return TextbookListingSerializer
         elif isinstance(listing, ItemListing):
             return ItemListingSerializer
+        elif isinstance(listing, PhysicalListing):
+            return PhysicalListingSerializer
         else:
             return ListingSerializer

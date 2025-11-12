@@ -1,4 +1,5 @@
 import os
+import cloudinary
 from pathlib import Path
 from urllib.parse import urlparse, unquote
 from dotenv import load_dotenv

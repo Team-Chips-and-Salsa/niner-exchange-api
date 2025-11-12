@@ -8,7 +8,6 @@ class ListingSerializer(serializers.ModelSerializer):
 
     seller = serializers.SlugRelatedField(read_only=True, slug_field="email")
     images = serializers.SerializerMethodField()
-    listing_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Listing
@@ -19,36 +18,22 @@ class ListingSerializer(serializers.ModelSerializer):
             "description",
             "price",
             "status",
+            "listing_type",
             "created_at",
             "updated_at",
             "images",
-            "listing_type",
         ]
         read_only_fields = [
             "listing_id",
             "status",
+            "listing_type",
             "created_at",
             "updated_at",
-            "listing_type",
         ]
 
     def get_images(self, obj):
         qs = obj.images.order_by("upload_order")
         return ImageSerializer(qs, many=True, context=self.context).data
-
-    def get_listing_type(self, obj):
-        if hasattr(obj, "sublease"):
-            return "sublease"
-        elif hasattr(obj, "service"):
-            return "service"
-        elif hasattr(obj, "textbooklisting"):
-            return "textbook"
-        elif hasattr(obj, "itemlisting"):
-            return "item"
-        elif hasattr(obj, "physicallisting"):
-            return "physical"
-        else:
-            return "listing"
 
     def validate_price(self, value):
         if value <= decimal.Decimal("0.00"):
@@ -72,8 +57,17 @@ class ListingSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data["seller"] = self.context["request"].user
-
         validated_data["status"] = "ACTIVE"
+
+        # Set listing_type based on the model being created
+        if self.Meta.model == ItemListing:
+            validated_data["listing_type"] = "ITEM"
+        elif self.Meta.model == TextbookListing:
+            validated_data["listing_type"] = "TEXTBOOK"
+        elif self.Meta.model == Sublease:
+            validated_data["listing_type"] = "SUBLEASE"
+        elif self.Meta.model == Service:
+            validated_data["listing_type"] = "SERVICE"
 
         return super().create(validated_data)
 

@@ -18,6 +18,14 @@ class Listing(models.Model):
         validators=[MinValueValidator(Decimal("1"))],
     )
 
+    LISTING_TYPE_CHOICES = [
+        ("ITEM", "Item"),
+        ("TEXTBOOK", "Textbook"),
+        ("SUBLEASE", "Sublease"),
+        ("SERVICE", "Service"),
+    ]
+    listing_type = models.CharField(max_length=20, choices=LISTING_TYPE_CHOICES)
+
     STATUS_CHOICES = [
         ("ACTIVE", "Active"),
         ("SOLD", "Sold"),

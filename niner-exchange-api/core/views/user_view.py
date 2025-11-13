@@ -1,11 +1,15 @@
 from django.contrib.auth import authenticate
 
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions, generics
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from firebase_admin import auth as firebase_auth
+
+from core.models.user import CustomUser
+from core.serializers.user_serializer import UserSerializer
 
 class LoginView(APIView):
     def post(self, request, *args, **kwargs):
@@ -36,3 +40,10 @@ class LoginView(APIView):
             })
         else:
             return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+
+class GetUserView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'

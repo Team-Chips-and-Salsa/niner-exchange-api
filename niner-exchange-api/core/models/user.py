@@ -39,6 +39,9 @@ class CustomUser(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     profile_image_url = models.URLField(max_length=255, blank=True, null=True)
+    # Denormalized rating aggregates for fast profile reads
+    avg_rating = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
+    review_count = models.IntegerField(default=0)
 
     STATUS_CHOICES = [
         ('active', 'Active'),

@@ -1,4 +1,5 @@
 import os
+import cloudinary
 from pathlib import Path
 import cloudinary
 from urllib.parse import urlparse, unquote

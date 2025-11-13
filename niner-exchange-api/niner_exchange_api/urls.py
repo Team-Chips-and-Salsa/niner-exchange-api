@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include  # Add 'include' here
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -20,4 +20,8 @@ urlpatterns = [
     path(
         "api/pricing/", include("core.urls.pricing_urls")
     ),  # Pricing-related API endpoints
+    path(
+        "api/", include("core.urls.meetup_location_urls")
+    ),  # Public Meetup Locations API endpoints
+    path("api/", include("core.urls.user_urls")),  # User-related API endpoints
 ]

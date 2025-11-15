@@ -10,6 +10,7 @@ from core.models import CustomUser
 from firebase_admin import auth as firebase_auth
 
 
+# Used AI to figure out how to verify email upon registration
 class VerifyEmailView(APIView):
     permission_classes = (permissions.AllowAny,)
 

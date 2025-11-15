@@ -30,6 +30,10 @@ class UserSerializer(serializers.ModelSerializer):
             'status',
             'role',
             'updated_at',
+            'items_sold_count',
+            'bio',
+            'is_verified_student',
+            'last_active',
         ]
         read_only_fields = ['id', 'avg_rating', 'review_count', 'updated_at']
 

@@ -39,6 +39,9 @@ class CustomUser(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     profile_image_url = models.URLField(max_length=255, blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    is_verified_student = models.BooleanField(default=False)
+    last_active = models.DateTimeField(null=True, blank=True)
     # Denormalized rating aggregates for fast profile reads
     avg_rating = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True)
     review_count = models.IntegerField(default=0)
@@ -57,7 +60,8 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
 
     updated_at = models.DateTimeField(auto_now=True)
-
+    
+    items_sold_count = models.IntegerField(default=0)
     groups = models.ManyToManyField(
         Group,
         related_name="customuser_groups",  # Unique related_name

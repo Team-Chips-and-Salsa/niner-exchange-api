@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "cloudinary_storage",
     "cloudinary",
     "core",
@@ -162,10 +163,10 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(
-        minutes=int(os.getenv("JWT_ACCESS_MINUTES", "60"))
-    ),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=int(os.getenv("JWT_REFRESH_DAYS", "7"))),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
     "UPDATE_LAST_LOGIN": True,
 }
@@ -186,3 +187,15 @@ CACHES = {
         "TIMEOUT": 7200,  # 2 hours
     }
 }
+
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")
+
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+
+SENDGRID_API_KEY = SENDGRID_API_KEY
+
+SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
+
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@ninerexchange.com")

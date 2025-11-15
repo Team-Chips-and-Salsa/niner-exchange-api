@@ -24,6 +24,9 @@ class ListingListCreateView(generics.ListCreateAPIView):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filterset_class = ListingFilter
 
+    def perform_create(self, serializer):
+        serializer.save(seller=self.request.user)
+
     def get_queryset(self):
         queryset = Listing.objects.select_related("seller").prefetch_related("images")
 
@@ -77,6 +80,8 @@ class ListingListCreateView(generics.ListCreateAPIView):
         else:
             # Base Listing
             serializer = ListingSerializer(listing, context={"request": self.request})
+
+
 
         return serializer.data
 

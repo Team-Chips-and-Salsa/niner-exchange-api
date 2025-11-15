@@ -23,6 +23,7 @@ class ListingSellerSerializer(serializers.ModelSerializer):
             "avg_rating",
             "review_count",
             "profile_image_url",
+            "email",
         ]
         read_only_fields = fields
 
@@ -66,17 +67,6 @@ class ListingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Price must be at least $1.")
 
         return value
-
-    def validate(self, attrs):
-        title = attrs.get("title")
-        description = attrs.get("description")
-
-        if title and description and title.lower() == description.lower():
-            raise serializers.ValidationError(
-                "Title and description cannot be the same."
-            )
-
-        return attrs
 
     def create(self, validated_data):
         validated_data["seller"] = self.context["request"].user

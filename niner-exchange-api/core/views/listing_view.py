@@ -81,6 +81,7 @@ class ListingListCreateView(generics.ListCreateAPIView):
         return serializer.data
 
 
+# Used Gemini guided learning to help me learn how to adapt to a multi-table inheritance
 class ListingUpdateView(generics.UpdateAPIView):
     serializer_class = ListingSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -88,6 +89,38 @@ class ListingUpdateView(generics.UpdateAPIView):
 
     def get_queryset(self):
         return Listing.objects.filter(seller=self.request.user)
+    
+    def get_object(self):
+        listing = super().get_object()
+
+        if hasattr(listing, "sublease"):
+            return listing.sublease
+        elif hasattr(listing, "service"):
+            return listing.service
+        elif hasattr(listing, "physicallisting"):
+            if hasattr(listing.physicallisting, "textbooklisting"):
+                return listing.physicallisting.textbooklisting
+            if hasattr(listing.physicallisting, "itemlisting"):
+                return listing.physicallisting.itemlisting
+            return listing.physicallisting
+        else:
+            return listing
+
+    def get_serializer_class(self):
+        listing = self.get_object()
+
+        if isinstance(listing, Sublease):
+            return SubleaseSerializer
+        elif isinstance(listing, Service):
+            return ServiceSerializer
+        elif isinstance(listing, TextbookListing):
+            return TextbookListingSerializer
+        elif isinstance(listing, ItemListing):
+            return ItemListingSerializer
+        elif isinstance(listing, PhysicalListing):
+            return PhysicalListingSerializer
+        else:
+            return ListingSerializer
 
 
 class ListingStatusUpdateView(generics.UpdateAPIView):

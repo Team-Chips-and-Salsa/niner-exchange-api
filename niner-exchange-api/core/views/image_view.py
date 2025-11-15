@@ -21,8 +21,9 @@ class ImageCreateView(generics.CreateAPIView):
 
         new_images = []
         for i in range(len(upload_orders)):
-            new_image = Image.objects.create(listing=listing, image=images[i], upload_order=upload_orders[i])
-            new_images.append(new_image)
+            # new_image = Image.objects.create(listing=listing, image=images[i], upload_order=upload_orders[i])
+            new_image = Image.objects.update_or_create(listing=listing, upload_order=upload_orders[i], defaults={'image': images[i]})
+            new_images.append(new_image[0])
 
         created_serializer = self.get_serializer(new_images, many=True)
         return Response(created_serializer.data, status=status.HTTP_201_CREATED)

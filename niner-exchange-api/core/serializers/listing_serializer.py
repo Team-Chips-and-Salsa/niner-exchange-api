@@ -146,4 +146,4 @@ class ServiceSerializer(ListingSerializer):
 
     class Meta(ListingSerializer.Meta):
         model = Service
-        fields = ListingSerializer.Meta.fields
+        fields = ListingSerializer.Meta.fields + ["rate_type"]

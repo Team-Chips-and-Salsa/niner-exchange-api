@@ -155,6 +155,7 @@ class SubleaseSerializer(ListingSerializer):
             "number_of_bedrooms",
             "number_of_roommates",
             "distance_from_campus_minutes",
+            "physical_address",
         ]
 
     def validate(self, attrs):
@@ -175,4 +176,4 @@ class ServiceSerializer(ListingSerializer):
 
     class Meta(ListingSerializer.Meta):
         model = Service
-        fields = ListingSerializer.Meta.fields
+        fields = ListingSerializer.Meta.fields + ["rate_type"]

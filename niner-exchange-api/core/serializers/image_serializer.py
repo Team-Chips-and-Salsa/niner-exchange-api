@@ -16,6 +16,7 @@ class ImageSerializer(serializers.ModelSerializer):
             "image",
         ]
         read_only_fields = ["image_id"]
+        validators =[]
 
     # Used AI to fix representation of image URL
     def to_representation(self, instance):

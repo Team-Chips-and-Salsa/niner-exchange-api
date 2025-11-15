@@ -78,7 +78,9 @@ class Sublease(Listing):
     distance_from_campus_minutes = models.IntegerField(
         validators=[MinValueValidator(1)]
     )
+    physical_address = models.CharField(max_length=50, default="")
 
 
 class Service(Listing):
-    pass
+    RATE_TYPE = [("FIXED", "Fixed Price"), ("HOURLY", "Hourly"), ("UNIT", "Unit"), ("PERSON", "Person"), ("GROUP", "Group")]
+    rate_type = models.CharField(max_length=10, choices=RATE_TYPE, default="FIXED")

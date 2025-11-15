@@ -11,4 +11,4 @@ class SubleaseListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filterset_fields = ["status", "property_type", "number_of_bedrooms"]
+    filterset_fields = ["status", "property_type", "number_of_bedrooms", "physical_address"]

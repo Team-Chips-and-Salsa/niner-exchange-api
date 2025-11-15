@@ -52,6 +52,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "last_name": {"required": True},
         }
 
+    # Used AI to validate Email and figure out how to send an email
     def validate_email(self, value):
         if not value.endswith("@charlotte.edu"):
             raise serializers.ValidationError(

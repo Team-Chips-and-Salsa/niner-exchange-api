@@ -8,12 +8,12 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.conf import settings
 
-
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = (permissions.AllowAny,)
     serializer_class = RegisterSerializer
 
+    # Used AI to figure out how to send verification email upon registration
     def perform_create(self, serializer):
         user = serializer.save()
         try:

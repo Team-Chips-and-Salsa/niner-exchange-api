@@ -126,6 +126,7 @@ class SubleaseSerializer(ListingSerializer):
             "number_of_bedrooms",
             "number_of_roommates",
             "distance_from_campus_minutes",
+            "physical_address",
         ]
 
     def validate(self, attrs):

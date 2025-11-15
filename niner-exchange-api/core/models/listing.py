@@ -78,6 +78,7 @@ class Sublease(Listing):
     distance_from_campus_minutes = models.IntegerField(
         validators=[MinValueValidator(1)]
     )
+    physical_address = models.CharField(max_length=50, default="")
 
 
 class Service(Listing):

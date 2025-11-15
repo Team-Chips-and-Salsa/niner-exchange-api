@@ -18,6 +18,7 @@ class LogoutView(APIView):
 
             token = RefreshToken(refresh_token)
             token.blacklist()
+
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,12 +1,35 @@
 import decimal
 from rest_framework import serializers
-from core.models.listing import Listing, ItemListing, TextbookListing, Sublease, Service, PhysicalListing
+
+from core.models import CustomUser
+from core.models.listing import (
+    Listing,
+    ItemListing,
+    TextbookListing,
+    Sublease,
+    Service,
+    PhysicalListing,
+)
 from core.serializers.image_serializer import ImageSerializer
+
+
+class ListingSellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "avg_rating",
+            "review_count",
+            "profile_image_url",
+        ]
+        read_only_fields = fields
 
 
 class ListingSerializer(serializers.ModelSerializer):
 
-    seller = serializers.SlugRelatedField(read_only=True, slug_field="email")
+    seller = ListingSellerSerializer(read_only=True)
     images = serializers.SerializerMethodField()
 
     class Meta:
@@ -99,10 +122,12 @@ class ListingStatusSerializer(serializers.ModelSerializer):
 
         return value
 
+
 class PhysicalListingSerializer(ListingSerializer):
     class Meta(ListingSerializer.Meta):
         model = PhysicalListing
         fields = ListingSerializer.Meta.fields + ["condition", "price_new"]
+
 
 class ItemListingSerializer(ListingSerializer):
     class Meta(ListingSerializer.Meta):
@@ -113,7 +138,11 @@ class ItemListingSerializer(ListingSerializer):
 class TextbookListingSerializer(ListingSerializer):
     class Meta(ListingSerializer.Meta):
         model = TextbookListing
-        fields = ListingSerializer.Meta.fields + ["condition", "course_code", "price_new"]
+        fields = ListingSerializer.Meta.fields + [
+            "condition",
+            "course_code",
+            "price_new",
+        ]
 
 
 class SubleaseSerializer(ListingSerializer):

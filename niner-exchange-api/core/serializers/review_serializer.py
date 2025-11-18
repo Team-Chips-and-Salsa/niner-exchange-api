@@ -2,6 +2,7 @@ from rest_framework import serializers
 from core.models.review import Review
 from core.models.transaction import Transaction
 from core.models.user import CustomUser
+from core.serializers.listing_serializer import ListingMinimalSerializer
 from core.serializers.user_serializer import (
     ListingSellerSerializer,
 )
@@ -64,7 +65,15 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
 class PopulatedReviewSerializer(serializers.ModelSerializer):
     reviewer = ListingSellerSerializer(read_only=True)
+    listing = ListingMinimalSerializer(source="transaction.listing", read_only=True)
 
     class Meta:
         model = Review
-        fields = ["review_id", "reviewer", "rating", "comment", "created_at"]
+        fields = [
+            "review_id",
+            "reviewer",
+            "listing",
+            "rating",
+            "comment",
+            "created_at",
+        ]

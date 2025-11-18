@@ -20,6 +20,6 @@ class UserReviewListView(generics.ListAPIView):
         user_id = self.kwargs["user_id"]
         return (
             Review.objects.filter(reviewee_id=user_id)
-            .select_related("reviewer")
+            .select_related("reviewer", "transaction__listing")
             .order_by("-created_at")
         )

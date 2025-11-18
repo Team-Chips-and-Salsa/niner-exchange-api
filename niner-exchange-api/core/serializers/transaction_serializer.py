@@ -56,11 +56,10 @@ class TransactionSerializer(serializers.ModelSerializer):
                 "The 'seller' field does not match the listing's owner."
             )
 
-        if request and request.user.is_authenticated:
-            if request.user != buyer:
-                raise serializers.ValidationError(
-                    "You must be the buyer to create this transaction."
-                )
+        if request.user != buyer and request.user != seller:
+            raise serializers.ValidationError(
+                "You must be a participant (buyer or seller) to create this transaction."
+            )
 
         if listing:
             existing_accepted = Transaction.objects.filter(

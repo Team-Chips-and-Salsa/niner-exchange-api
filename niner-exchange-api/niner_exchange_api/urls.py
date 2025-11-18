@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include  # Add 'include' here
 
+from core.views.auth_views.health_view import HealthCheckView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/health/", HealthCheckView.as_view(), name="health-check"),
     path(
         "api/auth/", include("core.urls.auth_urls")
     ),  # Authentication endpoints (login, register)

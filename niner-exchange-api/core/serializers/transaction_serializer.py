@@ -5,6 +5,17 @@ from core.models.user import CustomUser
 from core.models.transaction import Transaction
 from core.models.meetup_location import MeetupLocation
 
+from rest_framework import serializers
+
+from core.models import Listing
+from core.models.user import CustomUser
+from core.models.transaction import Transaction
+from core.models.meetup_location import MeetupLocation
+from core.serializers.listing_serializer import (
+    ListingSellerSerializer,
+    ListingSerializer,
+)
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     buyer = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
@@ -33,20 +44,37 @@ class TransactionSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         buyer = attrs.get("buyer")
         seller = attrs.get("seller")
+        listing = attrs.get("listing")
+
         if buyer == seller:
             raise serializers.ValidationError(
                 "Buyer and seller cannot be the same user."
             )
-        # Ensure the initiator is part of the transaction
+
+        if listing and listing.seller != seller:
+            raise serializers.ValidationError(
+                "The 'seller' field does not match the listing's owner."
+            )
+
         if request and request.user.is_authenticated:
-            if request.user != buyer and request.user != seller:
+            if request.user != buyer:
                 raise serializers.ValidationError(
-                    "You must be a participant (buyer or seller) to create this transaction."
+                    "You must be the buyer to create this transaction."
                 )
+
+        if listing:
+            existing_accepted = Transaction.objects.filter(
+                listing=listing, buyer=buyer, status="ACCEPTED"
+            ).exists()
+
+            if existing_accepted:
+                raise serializers.ValidationError(
+                    "You already have an accepted transaction for this listing."
+                )
+
         return attrs
 
     def create(self, validated_data):
-        # All newly created transactions start as PENDING
         validated_data["status"] = "PENDING"
         return super().create(validated_data)
 
@@ -86,3 +114,22 @@ class TransactionStatusSerializer(serializers.ModelSerializer):
                 f"Cannot change status from {current} to {new_status}."
             )
         return attrs
+
+
+class PopulatedTransactionSerializer(serializers.ModelSerializer):
+    listing = ListingSerializer(read_only=True)
+    buyer = ListingSellerSerializer(read_only=True)
+    seller = ListingSellerSerializer(read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = [
+            "id",
+            "listing",
+            "buyer",
+            "seller",
+            "final_price",
+            "status",
+            "created_at",
+            "updated_at",
+        ]

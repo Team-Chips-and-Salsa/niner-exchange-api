@@ -13,21 +13,21 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'date_joined',
-            'email',
-            'profile_image_url',
-            'avg_rating',
-            'review_count',
-            'status',
-            'role',
-            'updated_at',
-            'items_sold_count',
-            'bio',
-            'is_verified_student',
-            'last_active',
+            "id",
+            "first_name",
+            "last_name",
+            "date_joined",
+            "email",
+            "profile_image_url",
+            "avg_rating",
+            "review_count",
+            "status",
+            "role",
+            "updated_at",
+            "items_sold_count",
+            "bio",
+            "is_verified_student",
+            "last_active",
         ]
         read_only_fields = ["id", "avg_rating", "review_count", "updated_at"]
 
@@ -77,3 +77,18 @@ class RegisterSerializer(serializers.ModelSerializer):
             is_active=False,
         )
         return user
+
+
+class ListingSellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "avg_rating",
+            "review_count",
+            "profile_image_url",
+            "date_joined",
+        ]
+        read_only_fields = fields

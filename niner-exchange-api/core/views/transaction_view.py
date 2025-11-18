@@ -54,6 +54,7 @@ class TransactionStatusUpdateView(generics.UpdateAPIView):
                     "is_read": False,
                     "created_at": firestore.SERVER_TIMESTAMP,
                     "link_to": f"/review-user/{instance.seller.id}/{instance.id}",
+                    "transactionId": str(instance.id),
                 }
 
                 db.collection("notifications").add(notification_data)

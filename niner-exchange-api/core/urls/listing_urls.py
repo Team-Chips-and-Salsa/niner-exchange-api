@@ -1,6 +1,7 @@
 from django.urls import path
 
 from core.views.listing_view import ListingListCreateView, ListingStatusUpdateView, ListingUpdateView, GetListingView
+from core.views.purchase_history_view import PurchaseHistoryView
 
 urlpatterns = [
     path('listings/', ListingListCreateView.as_view(), name="listing-list-create"),

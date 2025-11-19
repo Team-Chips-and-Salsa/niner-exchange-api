@@ -11,6 +11,8 @@ from core.models.listing import (
     PhysicalListing,
 )
 from core.serializers.image_serializer import ImageSerializer
+from core.models.transaction import Transaction
+from core.models.meetup_location import MeetupLocation
 
 
 class ListingSellerSerializer(serializers.ModelSerializer):
@@ -54,6 +56,8 @@ class ListingSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+        
 
     def get_images(self, obj):
         qs = obj.images.order_by("upload_order")
@@ -167,3 +171,19 @@ class ServiceSerializer(ListingSerializer):
     class Meta(ListingSerializer.Meta):
         model = Service
         fields = ListingSerializer.Meta.fields + ["rate_type"]
+
+
+class PurchaseHistorySerializer(serializers.ModelSerializer):
+    listing = ListingSerializer(read_only=True)
+    class Meta:
+        model = Transaction
+        fields = [
+            'id', 
+            'listing',  
+            'final_price', 
+            'status',
+            'created_at', 
+            'updated_at',
+            'seller',
+            'buyer',
+        ]

@@ -74,7 +74,7 @@ class Command(BaseCommand):
             title="Intro to CS Textbook (ITSC 1212)",
             description="Used, but in great condition. No highlighting.",
             price=Decimal("45.00"),
-            listing_type="TEXTBOOK",  # --- ADDED ---
+            listing_type="TEXTBOOK",
             condition="LIKE_NEW",
             course_code="ITSC1212",
             price_new=Decimal("120.00"),
@@ -107,7 +107,7 @@ class Command(BaseCommand):
             title="Room at U-Walk (Spring 2026)",
             description="Looking for a clean roommate. Private bathroom. Utilities included.",
             price=Decimal("850.00"),
-            listing_type="SUBLEASE",  # --- ADDED ---
+            listing_type="SUBLEASE",
             property_type="APARTMENT",
             start_date=timezone.datetime(2026, 1, 1),
             end_date=timezone.datetime(2026, 5, 15),
@@ -119,7 +119,7 @@ class Command(BaseCommand):
         Image.objects.create(
             listing=l3,
             upload_order=1,
-            image="https.www.americancampus.com/getmedia/02ee70ca-3b75-4e16-897c-54ebb743e6f0/474_13_Gallery_730x547.jpg",
+            image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763474116/474_13_Gallery_730x547_ysnbox.jpg",
         )
 
         # --- Listing 4: Service ---

@@ -188,8 +188,6 @@ Admin users can access additional endpoints at `/api/admin/`:
 - Manage exchange zones (meetup locations)
 - Access content type information
 
-Admin panel available at: `http://localhost:8000/admin/`
-
 ## Project Structure
 
 ```
@@ -225,39 +223,3 @@ niner-exchange-api/
 - Multi-table inheritance is used for different listing types
 - Signals automatically update user ratings and sold item counts
 - eBay API responses are cached for 30 minutes
-
-## Testing
-
-Run tests with:
-
-```bash
-python manage.py test
-```
-
-## Troubleshooting
-
-### Database Connection Error
-- Verify PostgreSQL is running
-- Check database credentials in `.env`
-- Ensure database exists
-
-### Import Errors
-- Confirm virtual environment is activated
-- Reinstall dependencies: `pip install -r requirements.txt`
-
-### Firebase Errors
-- Verify `firebase-service-account.json` exists in project root
-- Check Firebase project configuration
-
-### Email Not Sending
-- Verify SendGrid API key is valid
-- Check `DEFAULT_FROM_EMAIL` is configured
-- In development, emails may print to console
-
-## License
-
-This project is part of an academic assignment for UNC Charlotte.
-
-## Contributors
-
-- Add Contributors

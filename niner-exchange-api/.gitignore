@@ -17,6 +17,7 @@ build/
 *.iws
 out/
 .DS_Store
+**/.DS_Store
 
 # Secrets
 firebase-service-account.json

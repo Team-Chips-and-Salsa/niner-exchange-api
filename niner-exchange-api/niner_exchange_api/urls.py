@@ -24,4 +24,6 @@ urlpatterns = [
         "api/", include("core.urls.meetup_location_urls")
     ),  # Public Meetup Locations API endpoints
     path("api/", include("core.urls.user_urls")),  # User-related API endpoints
+    path("api/admin/", include("core.urls.admin_urls")),
+    path("api/", include("core.urls.report_urls"))
 ]

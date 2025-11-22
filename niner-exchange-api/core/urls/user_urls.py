@@ -1,5 +1,6 @@
 from django.urls import path
 
+from core.views.review_view import ReviewCreateView, UserReviewListView
 from core.views.user_view import GetUserView, GetMeView
 
 urlpatterns = [

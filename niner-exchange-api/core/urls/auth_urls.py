@@ -15,7 +15,7 @@ urlpatterns = [
         VerifyEmailView.as_view(),
         name="verify-email",
     ),
-    path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("api/auth/logout/", LogoutView.as_view(), name="logout"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("logout/", LogoutView.as_view(), name="logout"),
     path("get-me/", GetMeView.as_view(), name="get-me"),
 ]

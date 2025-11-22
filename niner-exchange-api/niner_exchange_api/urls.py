@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include  # Add 'include' here
 
+from core.views.auth_views.health_view import HealthCheckView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/health/", HealthCheckView.as_view(), name="health-check"),
     path(
         "api/auth/", include("core.urls.auth_urls")
     ),  # Authentication endpoints (login, register)
@@ -24,6 +27,7 @@ urlpatterns = [
         "api/", include("core.urls.meetup_location_urls")
     ),  # Public Meetup Locations API endpoints
     path("api/", include("core.urls.user_urls")),  # User-related API endpoints
+    path("api/", include("core.urls.review_urls")),  # Review-related API endpoints
     path("api/admin/", include("core.urls.admin_urls")),
     path("api/", include("core.urls.report_urls"))
 ]

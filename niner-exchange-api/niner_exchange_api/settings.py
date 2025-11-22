@@ -11,7 +11,7 @@ load_dotenv(dotenv_path=BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key-change-me")
 DEBUG = os.getenv("DJANGO_DEBUG", "1") == "1"
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -193,8 +193,6 @@ CACHES = {
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")
 
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-
-SENDGRID_API_KEY = SENDGRID_API_KEY
 
 SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
 

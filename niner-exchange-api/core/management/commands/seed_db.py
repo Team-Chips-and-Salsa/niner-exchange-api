@@ -29,11 +29,23 @@ class Command(BaseCommand):
         Image.objects.all().delete()
         Listing.objects.all().delete()
         MeetupLocation.objects.all().delete()  # --- ADDED ---
-        CustomUser.objects.filter(is_superuser=False).delete()
+        CustomUser.objects.all().delete()
 
         self.stdout.write("Creating new users...")
 
         # 1. Create users
+        admin = CustomUser.objects.create_superuser(
+            email="admin@charlotte.edu",
+            password="password123",
+            first_name="Admin",
+            last_name="User",
+            is_active=True,
+            is_verified_student=True,
+            is_superuser=True,
+            role="admin",
+        )
+        self.stdout.write(f"Created user: {admin.email}")
+
         user1 = CustomUser.objects.create_user(
             email="pgarces@charlotte.edu",
             password="password123",
@@ -139,6 +151,6 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                "\nSuccessfully seeded the database with 2 users, 1 location, 4 listings, and 4 images!"
+                "\nSuccessfully seeded the database with 3 users, 1 location, 4 listings, and 4 images!"
             )
         )

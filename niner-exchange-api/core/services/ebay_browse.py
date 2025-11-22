@@ -35,7 +35,23 @@ def get_average_listing_price(query, condition_ids):
     filter_value = "|".join(map(str, condition_ids))
     filter_string = f"conditionIds:{{{filter_value}}}"
 
-    params = {"q": query, "filter": filter_string, "limit": 50}
+    # Smart exclusion: Exclude accessory keywords unless they are part of the user's query
+    accessory_keywords = [
+        "case", "cover", "box", "screen", "protector", "skin", "sticker", "decal",
+        "cable", "charger", "adapter", "part", "replacement", "battery", "manual",
+        "stand", "mount", "holder", "fan", "cooler", "strap", "band",
+        "dummy", "fake", "prop", "display", "lens", "frame", "assembly",
+        "headphone", "headset", "earpod", "earbud"
+    ]
+    
+    query_words = set(query.lower().split())
+    exclusions = [word for word in accessory_keywords if word not in query_words]
+    
+    refined_query = query
+    if exclusions:
+        refined_query += " -" + " -".join(exclusions)
+
+    params = {"q": refined_query, "filter": filter_string, "limit": 50}
 
     prices = []
     try:
@@ -64,8 +80,38 @@ def get_average_listing_price(query, condition_ids):
             cache.set(cache_key, None, timeout=BROWSE_CACHE_DURATION)
             return None
 
+        # 1. First, remove extreme upper outliers using IQR (e.g. $25,000 item)
+        # We do this BEFORE gap detection so the gap detection isn't skewed by one massive outlier
+        if len(prices) > 4:
+            sorted_prices = sorted(prices)
+            q1 = sorted_prices[len(sorted_prices) // 4]
+            q3 = sorted_prices[3 * len(sorted_prices) // 4]
+            iqr = q3 - q1
+            upper_bound = q3 + 1.5 * iqr
+            
+            # Filter out upper outliers
+            prices = [p for p in sorted_prices if p <= upper_bound]
+            if not prices:
+                prices = sorted_prices
+
+        # 2. Filter out low-price accessories using a "Significant Gap" heuristic
+        sorted_prices = sorted(prices)
+        cutoff_index = 0
+        for i in range(len(sorted_prices) - 1):
+            current_price = sorted_prices[i]
+            next_price = sorted_prices[i+1]
+            
+            # Relaxed gap: > 2x price AND > $50 difference
+            # This catches the jump from "Parts/Broken" ($300) to "Used/Refurb" ($700)
+            if next_price > current_price * 2 and (next_price - current_price) > 50:
+                cutoff_index = i + 1
+                break 
+        
+        # Keep only the prices from the high-value cluster
+        final_prices = sorted_prices[cutoff_index:]
+
         # Calculate median price
-        median_price = round(statistics.median(prices), 2)
+        median_price = round(statistics.median(final_prices), 2)
         cache.set(cache_key, median_price, timeout=BROWSE_CACHE_DURATION)
         return median_price
 

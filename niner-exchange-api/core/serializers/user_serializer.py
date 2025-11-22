@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from core.models.user import CustomUser
@@ -9,25 +10,27 @@ class UserSerializer(serializers.ModelSerializer):
         max_digits=3, decimal_places=2, read_only=True
     )
     review_count = serializers.IntegerField(read_only=True)
+    rating_breakdown = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
         fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'date_joined',
-            'email',
-            'profile_image_url',
-            'avg_rating',
-            'review_count',
-            'status',
-            'role',
-            'updated_at',
-            'items_sold_count',
-            'bio',
-            'is_verified_student',
-            'last_active',
+            "id",
+            "first_name",
+            "last_name",
+            "date_joined",
+            "email",
+            "profile_image_url",
+            "avg_rating",
+            "review_count",
+            "rating_breakdown",
+            "status",
+            "role",
+            "updated_at",
+            "items_sold_count",
+            "bio",
+            "is_verified_student",
+            "last_active",
         ]
         read_only_fields = [
             "id",
@@ -51,6 +54,17 @@ class UserSerializer(serializers.ModelSerializer):
             except (TypeError, ValueError):
                 pass
         return data
+
+    def get_rating_breakdown(self, obj):
+        breakdown = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0}
+
+        counts = obj.reviews_received.values("rating").annotate(count=Count("rating"))
+
+        for item in counts:
+            if item["rating"] in breakdown:
+                breakdown[item["rating"]] = item["count"]
+
+        return breakdown
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -88,3 +102,18 @@ class RegisterSerializer(serializers.ModelSerializer):
             is_active=False,
         )
         return user
+
+
+class ListingSellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "avg_rating",
+            "review_count",
+            "profile_image_url",
+            "date_joined",
+        ]
+        read_only_fields = fields

@@ -187,3 +187,19 @@ class PurchaseHistorySerializer(serializers.ModelSerializer):
             'seller',
             'buyer',
         ]
+class ListingMinimalSerializer(serializers.ModelSerializer):
+    cover_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Listing
+        fields = ["listing_id", "title", "cover_image"]
+        read_only_fields = fields
+
+    def get_cover_image(self, obj):
+
+        first_image = obj.images.order_by("upload_order").first()
+
+        if first_image:
+            return ImageSerializer(first_image, context=self.context).data
+
+        return None

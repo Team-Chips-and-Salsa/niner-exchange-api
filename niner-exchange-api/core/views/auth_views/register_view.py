@@ -1,3 +1,5 @@
+import os
+
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
 from core.models.user import CustomUser
@@ -7,6 +9,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.conf import settings
+
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 
 class RegisterView(generics.CreateAPIView):
@@ -20,8 +24,7 @@ class RegisterView(generics.CreateAPIView):
         try:
             token = default_token_generator.make_token(user)
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-            frontend_url = "http://localhost:5173"
-            verification_link = f"{frontend_url}/verify-email/{uidb64}/{token}/"
+            verification_link = f"{FRONTEND_URL}/verify-email/{uidb64}/{token}/"
 
             subject = "Verify Your Niner Exchange Account"
             message = (

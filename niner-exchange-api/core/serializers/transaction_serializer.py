@@ -1,68 +1,134 @@
 from rest_framework import serializers
 
+from core.models import Listing
 from core.models.user import CustomUser
 from core.models.transaction import Transaction
 from core.models.meetup_location import MeetupLocation
 
+from rest_framework import serializers
+
+from core.models import Listing
+from core.models.user import CustomUser
+from core.models.transaction import Transaction
+from core.models.meetup_location import MeetupLocation
+from core.serializers.listing_serializer import (
+    ListingSellerSerializer,
+    ListingSerializer,
+)
+
+
 class TransactionSerializer(serializers.ModelSerializer):
     buyer = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
     seller = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
-    meetup_location = serializers.PrimaryKeyRelatedField(queryset=MeetupLocation.objects.all())
+    meetup_location = serializers.PrimaryKeyRelatedField(
+        queryset=MeetupLocation.objects.all()
+    )
+    listing = serializers.PrimaryKeyRelatedField(queryset=Listing.objects.all())
 
     class Meta:
         model = Transaction
         fields = [
-            'id', 'buyer', 'seller', 'meetup_location', 'final_price', 'status',
-            'created_at', 'updated_at'
+            "id",
+            "buyer",
+            "seller",
+            "meetup_location",
+            "final_price",
+            "status",
+            "listing",
+            "created_at",
+            "updated_at",
         ]
-        read_only_fields = ['id', 'status', 'created_at', 'updated_at']
+        read_only_fields = ["id", "status", "created_at", "updated_at"]
 
     def validate(self, attrs):
-        request = self.context.get('request')
-        buyer = attrs.get('buyer')
-        seller = attrs.get('seller')
+        request = self.context.get("request")
+        buyer = attrs.get("buyer")
+        seller = attrs.get("seller")
+        listing = attrs.get("listing")
+
         if buyer == seller:
-            raise serializers.ValidationError('Buyer and seller cannot be the same user.')
-        # Ensure the initiator is part of the transaction
-        if request and request.user.is_authenticated:
-            if request.user != buyer and request.user != seller:
-                raise serializers.ValidationError('You must be a participant (buyer or seller) to create this transaction.')
+            raise serializers.ValidationError(
+                "Buyer and seller cannot be the same user."
+            )
+
+        if listing and listing.seller != seller:
+            raise serializers.ValidationError(
+                "The 'seller' field does not match the listing's owner."
+            )
+
+        if request.user != buyer and request.user != seller:
+            raise serializers.ValidationError(
+                "You must be a participant (buyer or seller) to create this transaction."
+            )
+
+        if listing:
+            existing_accepted = Transaction.objects.filter(
+                listing=listing, buyer=buyer, status="ACCEPTED"
+            ).exists()
+
+            if existing_accepted:
+                raise serializers.ValidationError(
+                    "You already have an accepted transaction for this listing."
+                )
+
         return attrs
 
     def create(self, validated_data):
-        # All newly created transactions start as PENDING
-        validated_data['status'] = 'PENDING'
+        validated_data["status"] = "PENDING"
         return super().create(validated_data)
 
 
 class TransactionStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['status']
+        fields = ["status"]
 
     def validate_status(self, value):
-        if value not in ['PENDING', 'ACCEPTED', 'REJECTED', 'COMPLETED']:
-            raise serializers.ValidationError('Invalid status value.')
+        if value not in ["PENDING", "ACCEPTED", "REJECTED", "COMPLETED"]:
+            raise serializers.ValidationError("Invalid status value.")
         return value
 
     def validate(self, attrs):
-        request = self.context.get('request')
+        request = self.context.get("request")
         instance: Transaction = self.instance
-        new_status = attrs.get('status')
+        new_status = attrs.get("status")
         if not instance:
             return attrs
         # Only participants can update status
         if request and request.user.is_authenticated:
             if request.user != instance.buyer and request.user != instance.seller:
-                raise serializers.ValidationError('Only participants can update the transaction status.')
+                raise serializers.ValidationError(
+                    "Only participants can update the transaction status."
+                )
         # Basic transition rules
         allowed = {
-            'PENDING': {'ACCEPTED', 'REJECTED'},
-            'ACCEPTED': {'COMPLETED'},
-            'REJECTED': set(),
-            'COMPLETED': set(),
+            "PENDING": {"ACCEPTED", "REJECTED"},
+            "ACCEPTED": {"COMPLETED"},
+            "REJECTED": set(),
+            "COMPLETED": set(),
         }
         current = instance.status
         if new_status not in allowed.get(current, set()):
-            raise serializers.ValidationError(f'Cannot change status from {current} to {new_status}.')
+            raise serializers.ValidationError(
+                f"Cannot change status from {current} to {new_status}."
+            )
         return attrs
+
+
+class PopulatedTransactionSerializer(serializers.ModelSerializer):
+    listing = ListingSerializer(read_only=True)
+    buyer = ListingSellerSerializer(read_only=True)
+    seller = ListingSellerSerializer(read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = [
+            "id",
+            "listing",
+            "buyer",
+            "seller",
+            "final_price",
+            "status",
+            "created_at",
+            "updated_at",
+        ]

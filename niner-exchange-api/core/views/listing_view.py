@@ -181,3 +181,33 @@ class GetListingView(generics.RetrieveAPIView):
             return PhysicalListingSerializer
         else:
             return ListingSerializer
+
+class UserActiveListingListView(generics.ListAPIView):
+    serializer_class = ListingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('id')
+        return Listing.objects.filter(
+            seller_id=user_id,
+            status='ACTIVE' 
+        ).select_related("seller").prefetch_related("images").order_by('-created_at')
+    
+
+class UserSoldListingListView(UserActiveListingListView):
+ 
+    def get_queryset(self):
+        user_id = self.kwargs.get('id')
+        return Listing.objects.filter(
+            seller_id=user_id,
+            status='SOLD'   # <-- Filter: Only Sold
+        ).select_related("seller").prefetch_related("images").order_by('-created_at')
+    
+class ListingDeleteView(generics.DestroyAPIView):
+    queryset = Listing.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = "listing_id"
+
+    def get_queryset(self):
+        # Users can only delete their own listings
+        return Listing.objects.filter(seller=self.request.user)

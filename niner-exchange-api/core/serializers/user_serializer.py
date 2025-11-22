@@ -29,7 +29,18 @@ class UserSerializer(serializers.ModelSerializer):
             'is_verified_student',
             'last_active',
         ]
-        read_only_fields = ["id", "avg_rating", "review_count", "updated_at"]
+        read_only_fields = [
+            "id",
+            "avg_rating",   
+            "review_count",
+            "updated_at",
+            "date_joined",       
+            "email",           
+            "is_verified_student",
+            "items_sold_count",   
+            "last_active",        
+        ]   
+
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

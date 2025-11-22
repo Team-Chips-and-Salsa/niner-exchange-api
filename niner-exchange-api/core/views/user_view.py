@@ -17,3 +17,10 @@ class GetMeView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+    
+class UpdateMeView(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user

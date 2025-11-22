@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -22,6 +23,8 @@ class LoginView(APIView):
         user = authenticate(email=email, password=password)
 
         if user is not None:
+            user.last_active = timezone.now()
+            user.save(update_fields=['last_active'])
             refresh = RefreshToken.for_user(user)
             django_tokens = {
                 "refresh": str(refresh),

@@ -2,6 +2,8 @@ from rest_framework import serializers
 from core.models.report import Report
 from core.models.listing import Listing
 from core.models.user import CustomUser
+from core.models.review import Review
+from core.serializers.review_serializer import PopulatedReviewSerializer
 from core.serializers.listing_serializer import ListingSellerSerializer, ListingSerializer
 
 class ReportSerializer(serializers.ModelSerializer):
@@ -16,8 +18,8 @@ class ReportSerializer(serializers.ModelSerializer):
             return ListingSerializer(target_object, context=self.context).data
         elif isinstance(target_object, CustomUser):
             return ListingSellerSerializer(target_object, context=self.context).data
-        # elif isinstance(target_object, Review):
-        #     return ReviewSerializer(target_object, context=self.context).data
+        elif isinstance(target_object, Review):
+            return PopulatedReviewSerializer(target_object, context=self.context).data
 
     class Meta:
         model = Report
@@ -29,6 +31,7 @@ class ReportSerializer(serializers.ModelSerializer):
             'reporter',
             'reason',
             'status',
+            'description',
             'created_at',
         ]
 

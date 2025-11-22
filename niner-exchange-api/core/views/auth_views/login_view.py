@@ -7,9 +7,11 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from firebase_admin import auth as firebase_auth
+from core.throttles import UserRateThrottle
 
 
 class LoginView(APIView):
+    throttle_classes = [UserRateThrottle]
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
         password = request.data.get("password")

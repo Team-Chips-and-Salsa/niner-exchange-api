@@ -30,6 +30,7 @@ class Report(models.Model):
         ("DENIED", "Denied"),
     ]
     status = models.CharField(max_length=13, choices=STATUS_CHOICES, default="PENDING")
+    description = models.TextField(max_length=100, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

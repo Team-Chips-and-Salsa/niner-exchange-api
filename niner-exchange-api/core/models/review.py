@@ -22,6 +22,11 @@ class Review(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, blank=False
     )
     comment = models.TextField(blank=True, null=True)
+    STATUS_CHOICES = [
+        ("ACTIVE", "Active"),
+        ("INACTIVE", "Inactive"),
+    ]
+    status = models.CharField(max_length=13, choices=STATUS_CHOICES, default="ACTIVE")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

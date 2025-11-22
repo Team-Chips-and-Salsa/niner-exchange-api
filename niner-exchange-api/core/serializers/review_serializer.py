@@ -75,5 +75,6 @@ class PopulatedReviewSerializer(serializers.ModelSerializer):
             "listing",
             "rating",
             "comment",
+            "status",
             "created_at",
         ]

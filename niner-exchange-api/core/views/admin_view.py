@@ -4,6 +4,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from core.permissions import isAdminUser
 from core.models.report import Report
 from core.models.listing import Listing
+from core.models.review import Review
+from core.models.user import CustomUser
 from django.contrib.contenttypes.models import ContentType
 from core.serializers.report_serializer import ReportSerializer, ReportStatusSerializer
 from core.serializers.content_type_serializer import ContentTypeSerializer
@@ -56,12 +58,12 @@ class FlaggedReportStatusUpdateView(generics.UpdateAPIView):
             if isinstance(target_object, Listing):
                 target_object.status = "REMOVE"
                 target_object.save()
-            # elif isinstance(target_object, User):
-            #     target_object.status = "REMOVE"
-            #     target_object.save()
-            # elif isinstance(target_object, Review):
-            #     target_object.status = "REMOVE"
-            #     target_object.save()
+            elif isinstance(target_object, CustomUser):
+                target_object.status = "suspended"
+                target_object.save()
+            elif isinstance(target_object, Review):
+                target_object.status = "INACTIVE"
+                target_object.save()
 
 class ExchangeZonesView(MeetupLocationListView):
     permission_classes = [permissions.IsAuthenticated, isAdminUser]

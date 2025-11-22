@@ -6,7 +6,7 @@ from django.core.cache import cache
 from .ebay_auth import get_ebay_application_token
 
 EBAY_BROWSE_URL = "https://api.ebay.com/buy/browse/v1/item_summary/search"
-BROWSE_CACHE_DURATION = 1800  # Cache results for 30 minutes
+BROWSE_CACHE_DURATION = 1800  # 30 minutes
 
 
 def get_average_listing_price(query, condition_ids):
@@ -17,7 +17,7 @@ def get_average_listing_price(query, condition_ids):
     # Generate cache key based on query and conditions
     conditions_str = "|".join(
         map(str, sorted(condition_ids))
-    )  # Ensure consistent order
+    )  
     cache_key = f'ebay_browse_{query.lower().replace(" ", "_")}_{conditions_str}'
 
     cached_price = cache.get(cache_key)
@@ -31,7 +31,6 @@ def get_average_listing_price(query, condition_ids):
 
     headers = {"Authorization": f"Bearer {token}"}
 
-    # Format filter string correctly: conditionIds:{id1}|{id2}
     filter_value = "|".join(map(str, condition_ids))
     filter_string = f"conditionIds:{{{filter_value}}}"
 
@@ -57,13 +56,13 @@ def get_average_listing_price(query, condition_ids):
     try:
         response = requests.get(
             EBAY_BROWSE_URL, headers=headers, params=params, timeout=15
-        )  # Added timeout
+        )  
         response.raise_for_status()
         data = response.json()
 
         items = data.get("itemSummaries", [])
         if not items:
-            # Cache the fact that no items were found (cache None)
+            
             cache.set(cache_key, None, timeout=BROWSE_CACHE_DURATION)
             return None
 
@@ -89,7 +88,6 @@ def get_average_listing_price(query, condition_ids):
             iqr = q3 - q1
             upper_bound = q3 + 1.5 * iqr
             
-            # Filter out upper outliers
             prices = [p for p in sorted_prices if p <= upper_bound]
             if not prices:
                 prices = sorted_prices
@@ -107,10 +105,8 @@ def get_average_listing_price(query, condition_ids):
                 cutoff_index = i + 1
                 break 
         
-        # Keep only the prices from the high-value cluster
         final_prices = sorted_prices[cutoff_index:]
 
-        # Calculate median price
         median_price = round(statistics.median(final_prices), 2)
         cache.set(cache_key, median_price, timeout=BROWSE_CACHE_DURATION)
         return median_price
@@ -120,11 +116,11 @@ def get_average_listing_price(query, condition_ids):
             f"HTTP Error fetching eBay listings for {cache_key}: {e.response.status_code} - {e.response.text}"
         )
         # Cache None on error to prevent hammering the API
-        cache.set(cache_key, None, timeout=600)  # Cache error result for 10 min
+        cache.set(cache_key, None, timeout=600)  # 10 minutes
         return None
     except requests.exceptions.RequestException as e:
         print(f"Network Error fetching eBay listings for {cache_key}: {e}")
-        return None  # Return None, don't cache
+        return None 
     except Exception as e:
         print(f"An unexpected error occurred during listing fetch for {cache_key}: {e}")
-        return None  # Return None, don't cache
+        return None  

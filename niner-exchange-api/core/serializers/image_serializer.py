@@ -20,14 +20,11 @@ class ImageSerializer(serializers.ModelSerializer):
 
     # Used AI to fix representation of image URL
     def to_representation(self, instance):
-        # Get the default representation
         representation = super().to_representation(instance)
 
-        # Explicitly replace the 'image' value with the full URL
         if instance.image and hasattr(instance.image, "url"):
             representation["image"] = instance.image.url
         else:
-            # Handle cases where the image might be null
             representation["image"] = None
 
         return representation
@@ -37,7 +34,6 @@ class ImageSerializer(serializers.ModelSerializer):
         if not request or not request.user.is_authenticated:
             raise serializers.ValidationError("Authentication required.")
 
-        # Ensure the listing belongs to the authenticated user
         if listing.seller != request.user:
             raise serializers.ValidationError(
                 "You can only add images to your own listings."
@@ -52,7 +48,6 @@ class ImageSerializer(serializers.ModelSerializer):
         is_create = self.instance is None
 
         if listing and is_create and listing.images.count() >= 3:
-            # Max 3 images per listing
             raise serializers.ValidationError(
                 "You cannot upload more than 3 images per listing."
             )

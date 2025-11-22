@@ -11,7 +11,7 @@ class Image(models.Model):
     image_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='images')
     image = CloudinaryField('image')
-    # Limit range to 1-3
+    # Range Limiter
     upload_order = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)])
 
     class Meta:

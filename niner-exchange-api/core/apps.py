@@ -6,6 +6,6 @@ class CoreConfig(AppConfig):
     name = "core"
 
     def ready(self):
-        # This import runs the initialization code in firebase_config.py
+        # runs firebase
         import core.firebase_config
         import core.signals

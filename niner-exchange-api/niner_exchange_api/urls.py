@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include  # Add 'include' here
+from django.urls import path, include  
 
 from core.views.auth_views.health_view import HealthCheckView
 

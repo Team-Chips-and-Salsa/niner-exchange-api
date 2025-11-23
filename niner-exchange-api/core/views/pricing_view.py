@@ -1,10 +1,9 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated  # Or AllowAny if needed
+from rest_framework.permissions import IsAuthenticated  
 from rest_framework.response import Response
 from rest_framework import status
 from ..services.ebay_browse import get_average_listing_price
 
-# Define eBay condition IDs
 EBAY_CONDITION_NEW = [1000]
 EBAY_CONDITION_OPEN_BOX = [1500]
 EBAY_CONDITION_USED = [3000]

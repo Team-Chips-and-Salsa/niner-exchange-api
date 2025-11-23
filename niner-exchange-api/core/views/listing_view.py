@@ -53,27 +53,27 @@ class ListingListCreateView(generics.ListCreateAPIView):
         return Response(serialized_data)
 
     def _get_serialized_listing(self, listing):
-        # Check if listing is a Sublease
+        # Sublease
         if hasattr(listing, "sublease"):
             serializer = SubleaseSerializer(
                 listing.sublease, context={"request": self.request}
             )
-        # Check if listing is a Service
+        # Service
         elif hasattr(listing, "service"):
             serializer = ServiceSerializer(
                 listing.service, context={"request": self.request}
             )
-        # Check if listing is a TextbookListing
+        # TextbookListing
         elif hasattr(listing, "textbooklisting"):
             serializer = TextbookListingSerializer(
                 listing.textbooklisting, context={"request": self.request}
             )
-        # Check if listing is an ItemListing
+        # ItemListing
         elif hasattr(listing, "itemlisting"):
             serializer = ItemListingSerializer(
                 listing.itemlisting, context={"request": self.request}
             )
-        # Check if listing is a PhysicalListing (but not Item or Textbook)
+        # PhysicalListing (but not Item or Textbook)
         elif hasattr(listing, "physicallisting"):
             # This shouldn't happen if we don't create PhysicalListing directly
             serializer = ListingSerializer(listing, context={"request": self.request})
@@ -149,10 +149,8 @@ class GetListingView(generics.RetrieveAPIView):
     lookup_field = "listing_id"
 
     def get_object(self):
-        # Get the base listing object
         listing = super().get_object()
 
-        # Return the specific subclass instance
         if hasattr(listing, "sublease"):
             return listing.sublease
         elif hasattr(listing, "service"):
@@ -200,7 +198,7 @@ class UserSoldListingListView(UserActiveListingListView):
         user_id = self.kwargs.get('id')
         return Listing.objects.filter(
             seller_id=user_id,
-            status='SOLD'   # <-- Filter: Only Sold
+            status='SOLD'   
         ).select_related("seller").prefetch_related("images").order_by('-created_at')
     
 class ListingDeleteView(generics.DestroyAPIView):
@@ -209,5 +207,4 @@ class ListingDeleteView(generics.DestroyAPIView):
     lookup_field = "listing_id"
 
     def get_queryset(self):
-        # Users can only delete their own listings
         return Listing.objects.filter(seller=self.request.user)

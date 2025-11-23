@@ -4,7 +4,6 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.conf import settings
 
-# Import all your models
 from core.models.user import CustomUser
 from core.models.listing import (
     Listing,
@@ -15,7 +14,6 @@ from core.models.listing import (
 )
 from core.models.image import Image
 
-# --- 1. IMPORT YOUR MEETUPLOCATION MODEL ---
 from core.models.meetup_location import MeetupLocation
 
 
@@ -23,12 +21,10 @@ class Command(BaseCommand):
     help = "Seeds the database with initial data for users, listings, and images"
 
     def handle(self, *args, **options):
-        # 0. Start with a clean slate
         self.stdout.write("Deleting old data...")
-        # Delete in an order that respects foreign keys
         Image.objects.all().delete()
         Listing.objects.all().delete()
-        MeetupLocation.objects.all().delete()  # --- ADDED ---
+        MeetupLocation.objects.all().delete()
         CustomUser.objects.all().delete()
 
         self.stdout.write("Creating new users...")
@@ -67,7 +63,7 @@ class Command(BaseCommand):
         self.stdout.write(f"Created user: {user1.email}")
         self.stdout.write(f"Created user: {user2.email}")
 
-        # --- 2. CREATE MEETUP LOCATION ---
+        # 2. CREATE MEETUP LOCATION
         self.stdout.write("Creating meetup locations...")
         loc1 = MeetupLocation.objects.create(
             name="UNC Charlotte General Area",
@@ -80,7 +76,7 @@ class Command(BaseCommand):
         # 3. Create listings and link images
         self.stdout.write("Creating new listings and images...")
 
-        # --- Listing 1: Textbook ---
+        # Listing 1: Textbook
         l1 = TextbookListing.objects.create(
             seller=user1,
             title="Intro to CS Textbook (ITSC 1212)",
@@ -97,13 +93,13 @@ class Command(BaseCommand):
             image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440511/lg4aJlc_z4xy0a.jpg",
         )
 
-        # --- Listing 2: Item ---
+        # Listing 2: Item
         l2 = ItemListing.objects.create(
             seller=user2,
             title="Mini Fridge (Black)",
             description="Works perfectly, just don't need it anymore. Great for dorms.",
             price=Decimal("75.00"),
-            listing_type="ITEM",  # --- ADDED ---
+            listing_type="ITEM",  
             condition="USED",
             price_new=Decimal("150.00"),
         )
@@ -113,7 +109,7 @@ class Command(BaseCommand):
             image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440495/eVQZeqz_ux3arn.jpg",
         )
 
-        # --- Listing 3: Sublease ---
+        # Listing 3: Sublease
         l3 = Sublease.objects.create(
             seller=user2,
             title="Room at U-Walk (Spring 2026)",
@@ -134,13 +130,13 @@ class Command(BaseCommand):
             image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763474116/474_13_Gallery_730x547_ysnbox.jpg",
         )
 
-        # --- Listing 4: Service ---
+        # Listing 4: Service
         l4 = Service.objects.create(
             seller=user1,
             title="Math Tutoring (Calculus 1 & 2)",
             description="I can help you ace your final. $25/hr. Available evenings.",
             price=Decimal("25.00"),
-            listing_type="SERVICE",  # --- ADDED ---
+            listing_type="SERVICE",  
             rate_type="HOURLY",
         )
         Image.objects.create(

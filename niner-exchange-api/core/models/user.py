@@ -64,12 +64,12 @@ class CustomUser(AbstractUser):
     items_sold_count = models.IntegerField(default=0)
     groups = models.ManyToManyField(
         Group,
-        related_name="customuser_groups",  # Unique related_name
+        related_name="customuser_groups",  
         blank=True
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name="customuser_permissions",  # Unique related_name
+        related_name="customuser_permissions",  
         blank=True
     )
 

@@ -5,7 +5,7 @@ from django.conf import settings
 
 SERVICE_ACCOUNT_KEY_PATH = os.path.join(settings.BASE_DIR, 'firebase-service-account.json')
 
-# Initialize the app if it's not already initialized
+# Initialization
 if not firebase_admin._apps:
     cred = credentials.Certificate(SERVICE_ACCOUNT_KEY_PATH)
     firebase_admin.initialize_app(cred)

@@ -4,8 +4,6 @@ from django.dispatch import receiver
 
 from .models import Listing
 
-# Import your Review and CustomUser models
-# (Adjust the path if your models are in different files)
 from .models.review import Review
 from .models.user import CustomUser
 

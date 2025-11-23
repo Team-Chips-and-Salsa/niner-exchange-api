@@ -137,10 +137,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Custom user model (UUID PK)
 AUTH_USER_MODEL = "core.CustomUser"
 
-# Allow email authentication
 AUTHENTICATION_BACKENDS = [
     "core.auth_backend.EmailBackend",
     "django.contrib.auth.backends.ModelBackend",

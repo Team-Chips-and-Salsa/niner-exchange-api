@@ -15,6 +15,16 @@ class Command(BaseCommand):
             help="Use seed_db_b instead of the default seed_db",
         )
         parser.add_argument(
+            "--seed-c",
+            action="store_true",
+            help="Use seed_db_c (4 Zones, 1 Admin)",
+        )
+        parser.add_argument(
+            "--no-seed",
+            action="store_true",
+            help="Skip seeding step (leaves database empty)",
+        )
+        parser.add_argument(
             "--hard",
             action="store_true",
             help="Hard reset: Drops all tables/schema before migrating. WARNING: Destructive!",
@@ -55,9 +65,14 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Migrating..."))
         call_command("migrate")
 
-        if options["seed_b"]:
+        if options["no_seed"]:
+            self.stdout.write(self.style.SUCCESS("Skipping seeding (Database is empty)."))
+        elif options["seed_b"]:
             self.stdout.write(self.style.SUCCESS("Seeding database (Version B)..."))
             call_command("seed_db_b")
+        elif options["seed_c"]:
+            self.stdout.write(self.style.SUCCESS("Seeding database (Version C)..."))
+            call_command("seed_db_c")
         else:
             self.stdout.write(self.style.SUCCESS("Seeding database (Default)..."))
             call_command("seed_db")

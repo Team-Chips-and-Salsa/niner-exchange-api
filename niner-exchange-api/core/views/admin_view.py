@@ -11,6 +11,8 @@ from core.serializers.report_serializer import ReportSerializer, ReportStatusSer
 from core.serializers.content_type_serializer import ContentTypeSerializer
 from core.serializers.user_serializer import UserSerializer
 from core.views.meetup_location_view import MeetupLocationListView
+from core.models.meetup_location import MeetupLocation
+from core.serializers.meetup_location_serializer import MeetupLocationSerializer
 
 
 class ContentTypeView(generics.ListAPIView):
@@ -66,11 +68,31 @@ class FlaggedReportStatusUpdateView(generics.UpdateAPIView):
                 target_object.status = "INACTIVE"
                 target_object.save()
 
-class ExchangeZonesView(MeetupLocationListView):
+class MeetupLocationCreateView(generics.CreateAPIView):
+    queryset = MeetupLocation.objects.all().order_by('name')
+    serializer_class = MeetupLocationSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [permissions.IsAdminUser()]
+        return [permissions.IsAuthenticated()]
+
+class MeetupLocationListView(MeetupLocationListView):
     permission_classes = [permissions.IsAuthenticated, isAdminUser]
 
+<<<<<<< Updated upstream
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated, isAdminUser]
     
+=======
+class MeetupLocationDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MeetupLocation.objects.all()
+    serializer_class = MeetupLocationSerializer
+    permission_classes = [permissions.IsAuthenticated, isAdminUser]
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()
+>>>>>>> Stashed changes

@@ -1,10 +1,6 @@
 from django.urls import path
 
-<<<<<<< Updated upstream
-from core.views.admin_view import FlaggedReportView, ExchangeZonesView, ContentTypeView, FlaggedReportStatusUpdateView, UserListView
-=======
-from core.views.admin_view import FlaggedReportView, ContentTypeView, FlaggedReportStatusUpdateView, MeetupLocationCreateView, MeetupLocationDetailView
->>>>>>> Stashed changes
+from core.views.admin_view import FlaggedReportView, ContentTypeView, FlaggedReportStatusUpdateView, MeetupLocationCreateView, MeetupLocationDetailView, UserListView
 
 urlpatterns = [
     path('reports/', FlaggedReportView.as_view(), name='report-view'),

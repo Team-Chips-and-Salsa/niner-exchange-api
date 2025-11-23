@@ -80,13 +80,11 @@ class MeetupLocationCreateView(generics.CreateAPIView):
 class MeetupLocationListView(MeetupLocationListView):
     permission_classes = [permissions.IsAuthenticated, isAdminUser]
 
-<<<<<<< Updated upstream
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated, isAdminUser]
-    
-=======
+
 class MeetupLocationDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = MeetupLocation.objects.all()
     serializer_class = MeetupLocationSerializer
@@ -95,4 +93,3 @@ class MeetupLocationDetailView(generics.RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance):
         instance.is_active = False
         instance.save()
->>>>>>> Stashed changes

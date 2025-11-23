@@ -22,7 +22,7 @@ class TransactionStatusUpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "id"
 
-    # Improve security with AI
+    # Improved security with AI
     def get_queryset(self):
         user = self.request.user
         return Transaction.objects.filter(Q(buyer=user) | Q(seller=user))

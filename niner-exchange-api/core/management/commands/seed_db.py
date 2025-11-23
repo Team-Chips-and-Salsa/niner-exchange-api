@@ -43,7 +43,7 @@ class Command(BaseCommand):
         self.stdout.write(f"Created user: {admin.email}")
 
         user1 = CustomUser.objects.create_user(
-            email="test1@charlotte.com",
+            email="test1@charlotte.edu",
             password="password123",
             first_name="Test",
             last_name="1",
@@ -52,7 +52,7 @@ class Command(BaseCommand):
         )
 
         user2 = CustomUser.objects.create_user(
-            email="test2@charlotte.com",
+            email="test2@charlotte.edu",
             password="password123",
             first_name="Test",
             last_name="2",

@@ -368,7 +368,7 @@ class Command(BaseCommand):
             description="Help with resume, cover letters, and interview prep. Per session.",
             price=Decimal("30.00"),
             listing_type="SERVICE",
-            rate_type="PER_SESSION",
+            rate_type="FIXED",
         )
         Image.objects.create(
             listing=l17,
@@ -398,7 +398,7 @@ class Command(BaseCommand):
             description="Build simple websites or fix bugs. Flat rate per project.",
             price=Decimal("100.00"),
             listing_type="SERVICE",
-            rate_type="FLAT_RATE",
+            rate_type="FIXED",
         )
         Image.objects.create(
             listing=l19,

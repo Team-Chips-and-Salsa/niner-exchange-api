@@ -9,6 +9,7 @@ from core.models.user import CustomUser
 from django.contrib.contenttypes.models import ContentType
 from core.serializers.report_serializer import ReportSerializer, ReportStatusSerializer
 from core.serializers.content_type_serializer import ContentTypeSerializer
+from core.serializers.user_serializer import UserSerializer
 from core.views.meetup_location_view import MeetupLocationListView
 
 
@@ -66,5 +67,10 @@ class FlaggedReportStatusUpdateView(generics.UpdateAPIView):
                 target_object.save()
 
 class ExchangeZonesView(MeetupLocationListView):
+    permission_classes = [permissions.IsAuthenticated, isAdminUser]
+
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated, isAdminUser]
     

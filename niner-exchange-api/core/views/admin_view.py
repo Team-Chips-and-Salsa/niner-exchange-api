@@ -16,7 +16,7 @@ from core.views.meetup_location_view import MeetupLocationListView
 class ContentTypeView(generics.ListAPIView):
     queryset = ContentType.objects.all()
     serializer_class = ContentTypeSerializer
-    permission_classes = [permissions.IsAuthenticated, isAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
 
 class FlaggedReportView(generics.ListAPIView):
     queryset = Report.objects.all()

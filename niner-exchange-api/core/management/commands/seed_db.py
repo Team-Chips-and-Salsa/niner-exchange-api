@@ -43,19 +43,21 @@ class Command(BaseCommand):
         self.stdout.write(f"Created user: {admin.email}")
 
         user1 = CustomUser.objects.create_user(
-            email="test1@charlotte.edu",
+            email="user1@charlotte.edu",
             password="password123",
-            first_name="Test",
+            first_name="User",
             last_name="1",
+            profile_image_url="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763884660/User1_li52k3.jpg",
             is_active=True,
             is_verified_student=True,
         )
 
         user2 = CustomUser.objects.create_user(
-            email="test2@charlotte.edu",
+            email="user2@charlotte.edu",
             password="password123",
-            first_name="Test",
+            first_name="User",
             last_name="2",
+            profile_image_url="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763884655/user2_oxayet.jpg",
             is_active=True,
             is_verified_student=True,
         )

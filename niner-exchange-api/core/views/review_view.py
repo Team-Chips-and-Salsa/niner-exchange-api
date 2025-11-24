@@ -19,7 +19,7 @@ class UserReviewListView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
         return (
-            Review.objects.filter(reviewee_id=user_id)
+            Review.objects.filter(reviewee_id=user_id, status='ACTIVE')
             .select_related("reviewer", "transaction__listing")
             .order_by("-created_at")
         )

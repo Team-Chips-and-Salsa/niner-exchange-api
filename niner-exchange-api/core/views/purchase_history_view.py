@@ -12,5 +12,5 @@ class PurchaseHistoryView(generics.ListAPIView):
         
         return Transaction.objects.filter(
             buyer__id=buyer_id, 
-            status='PENDING'
+            status='COMPLETED'
         ).select_related('listing', 'listing__seller').prefetch_related('listing__images').order_by('-updated_at')

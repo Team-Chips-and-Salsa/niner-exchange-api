@@ -13,7 +13,7 @@ def update_user_ratings(reviewee_id):
     try:
         user = CustomUser.objects.get(id=reviewee_id)
 
-        user_reviews = user.reviews_received.all()
+        user_reviews = user.reviews_received.filter(status="ACTIVE")
 
         new_count = user_reviews.count()
         new_avg = user_reviews.aggregate(Avg("rating"))["rating__avg"]

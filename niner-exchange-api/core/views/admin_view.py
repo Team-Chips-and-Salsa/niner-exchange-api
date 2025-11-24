@@ -62,7 +62,7 @@ class FlaggedReportStatusUpdateView(generics.UpdateAPIView):
                 target_object.status = "REMOVE"
                 target_object.save()
             elif isinstance(target_object, CustomUser):
-                target_object.status = "suspended"
+                target_object.is_verified_student = False
                 target_object.save()
             elif isinstance(target_object, Review):
                 target_object.status = "INACTIVE"

@@ -101,6 +101,7 @@ class Command(BaseCommand):
             condition="USED",
             course_code="EXER2333",
             status="ACTIVE",
+            price_new=Decimal("60.00"),
         )
         Image.objects.create(listing=l1, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000298/textbook1_kelh3a.jpg")
         Image.objects.create(listing=l1, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000297/textbook2_g4hrn2.jpg")
@@ -148,7 +149,7 @@ class Command(BaseCommand):
             rate_type="HOURLY",
             status="ACTIVE",
         )
-        Image.objects.create(listing=l4, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440441/math-tutor-charlotte_yeps4p.jpg")
+        Image.objects.create(listing=l4, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764001946/math-tutor-charlotte_oknrbp.jpg")
 
         # 5. Item (Sold to User 2)
         l5_sold = ItemListing.objects.create(
@@ -159,6 +160,7 @@ class Command(BaseCommand):
             listing_type="ITEM",
             condition="USED",
             status="SOLD",
+            price_new=Decimal("200.00"),
         )
         Image.objects.create(listing=l5_sold, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/keyboard1_i475se.jpg")
         Image.objects.create(listing=l5_sold, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/keyboard2_jclpfu.jpg")
@@ -172,6 +174,7 @@ class Command(BaseCommand):
             listing_type="ITEM",
             condition="USED",
             status="SOLD",
+            price_new=Decimal("240.00"),
         )
         Image.objects.create(listing=l6_sold, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/monitor1_wkv8mw.jpg")
         Image.objects.create(listing=l6_sold, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/monitor2_n2l3dy.jpg")
@@ -187,6 +190,7 @@ class Command(BaseCommand):
             listing_type="ITEM",
             condition="NEW",
             status="ACTIVE",
+            price_new=Decimal("1000000.00"),
         )
         Image.objects.create(listing=l7_reported, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000973/toogood_fvejrs.jpg")
 

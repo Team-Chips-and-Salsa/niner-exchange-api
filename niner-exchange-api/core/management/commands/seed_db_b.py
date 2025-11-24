@@ -52,7 +52,7 @@ class Command(BaseCommand):
             password="password123",
             first_name="User",
             last_name="One",
-            profile_image_url="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763884660/User1_li52k3.jpg",
+            profile_image_url="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000296/User1_qthue6.jpg",
             is_active=True,
             is_verified_student=True,
         )
@@ -62,7 +62,7 @@ class Command(BaseCommand):
             password="password123",
             first_name="User",
             last_name="Two",
-            profile_image_url="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763884655/user2_oxayet.jpg",
+            profile_image_url="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000296/user2_ptdc5b.jpg",
             is_active=True,
             is_verified_student=True,
         )
@@ -75,8 +75,8 @@ class Command(BaseCommand):
         loc1 = MeetupLocation.objects.create(
             name="Student Union",
             description="Main entrance of the Student Union.",
-            latitude=35.308,
-            longitude=-80.733,
+            latitude=35.3075,
+            longitude=-80.734,
         )
         loc2 = MeetupLocation.objects.create(
             name="Atkins Library",
@@ -94,32 +94,35 @@ class Command(BaseCommand):
         # 1. Textbook (Active)
         l1 = TextbookListing.objects.create(
             seller=user1,
-            title="Intro to Psychology [B]",
+            title="Baseball: Through History and Playing I",
             description="Good condition.",
             price=Decimal("30.00"),
             listing_type="TEXTBOOK",
             condition="USED",
-            course_code="PSYC1101",
+            course_code="EXER2333",
             status="ACTIVE",
         )
-        Image.objects.create(listing=l1, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440511/lg4aJlc_z4xy0a.jpg")
+        Image.objects.create(listing=l1, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000298/textbook1_kelh3a.jpg")
+        Image.objects.create(listing=l1, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000297/textbook2_g4hrn2.jpg")
+        Image.objects.create(listing=l1, upload_order=3, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000295/textbook3_s9cti0.jpg")
 
         # 2. Item (Active)
         l2 = ItemListing.objects.create(
             seller=user1,
-            title="Wireless Mouse [B]",
+            title="Wireless Mouse",
             description="Works great.",
             price=Decimal("15.00"),
             listing_type="ITEM",
             condition="LIKE_NEW",
             status="ACTIVE",
         )
-        Image.objects.create(listing=l2, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440495/eVQZeqz_ux3arn.jpg")
+        Image.objects.create(listing=l2, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/mouse2_s8xdpc.jpg")
+        Image.objects.create(listing=l2, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/mouse1_sfis5p.jpg")
 
         # 3. Sublease (Active)
         l3 = Sublease.objects.create(
             seller=user1,
-            title="Summer Sublease [B]",
+            title="Summer Sublease",
             description="Available June-August.",
             price=Decimal("600.00"),
             listing_type="SUBLEASE",
@@ -132,13 +135,14 @@ class Command(BaseCommand):
             physical_address="100 University Blvd",
             status="ACTIVE",
         )
-        Image.objects.create(listing=l3, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763474116/474_13_Gallery_730x547_ysnbox.jpg")
+        Image.objects.create(listing=l3, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000298/sublease2_skfyfg.jpg")
+        Image.objects.create(listing=l3, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000298/sublease_ndmekk.jpg")
 
         # 4. Service (Active)
         l4 = Service.objects.create(
             seller=user1,
-            title="Dog Walking [B]",
-            description="I love dogs!",
+            title="Math Tutoring",
+            description="I can help you Ace your Math classes!",
             price=Decimal("15.00"),
             listing_type="SERVICE",
             rate_type="HOURLY",
@@ -149,40 +153,42 @@ class Command(BaseCommand):
         # 5. Item (Sold to User 2)
         l5_sold = ItemListing.objects.create(
             seller=user1,
-            title="Gaming Keyboard [B]",
+            title="Gaming Keyboard",
             description="RGB mechanical keyboard.",
-            price=Decimal("50.00"),
+            price=Decimal("100.00"),
             listing_type="ITEM",
             condition="USED",
             status="SOLD",
         )
-        Image.objects.create(listing=l5_sold, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440495/eVQZeqz_ux3arn.jpg")
+        Image.objects.create(listing=l5_sold, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/keyboard1_i475se.jpg")
+        Image.objects.create(listing=l5_sold, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/keyboard2_jclpfu.jpg")
 
         # 6. Item (Sold to User 2)
         l6_sold = ItemListing.objects.create(
             seller=user1,
-            title="Monitor 24 inch [B]",
+            title="Monitor 27 inch",
             description="1080p monitor.",
-            price=Decimal("80.00"),
+            price=Decimal("150.00"),
             listing_type="ITEM",
             condition="USED",
             status="SOLD",
         )
-        Image.objects.create(listing=l6_sold, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440495/eVQZeqz_ux3arn.jpg")
+        Image.objects.create(listing=l6_sold, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/monitor1_wkv8mw.jpg")
+        Image.objects.create(listing=l6_sold, upload_order=2, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000294/monitor2_n2l3dy.jpg")
 
         # --- User 2 Listings (1 total) ---
 
         # 7. Item (Active) - Reported by User 1
         l7_reported = ItemListing.objects.create(
             seller=user2,
-            title="Suspicious Item [B]",
+            title="Empress Eugénie Tiara",
             description="Too good to be true.",
             price=Decimal("5.00"),
             listing_type="ITEM",
             condition="NEW",
             status="ACTIVE",
         )
-        Image.objects.create(listing=l7_reported, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1763440495/eVQZeqz_ux3arn.jpg")
+        Image.objects.create(listing=l7_reported, upload_order=1, image="https://res.cloudinary.com/dtdzbyryo/image/upload/v1764000973/toogood_fvejrs.jpg")
 
         self.stdout.write("Created listings.")
 

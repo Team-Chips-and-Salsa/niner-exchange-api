@@ -202,6 +202,6 @@ SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")
 
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 
-SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@ninerexchange.com")

@@ -25,6 +25,13 @@ class LoginView(APIView):
         user = authenticate(email=email, password=password)
 
         if user is not None:
+            # Check if user is verified
+            if not user.is_verified_student:
+                return Response(
+                    {"error": "Please verify your email address before logging in. Check your inbox and spam folder for the verification email."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            
             user.last_active = timezone.now()
             user.save(update_fields=['last_active'])
             refresh = RefreshToken.for_user(user)
